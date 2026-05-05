@@ -18,6 +18,9 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import {
+  AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   Popover, PopoverContent, PopoverTrigger,
 } from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
@@ -62,6 +65,7 @@ export function ProductsClient({
 }) {
   const [createOpen, setCreateOpen] = useState(false);
   const [editProduct, setEditProduct] = useState<Product | null>(null);
+  const [productToDelete, setProductToDelete] = useState<Product | null>(null);
 
   const [nameFilter, setNameFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
@@ -70,7 +74,7 @@ export function ProductsClient({
   const filteredProducts = initialProducts.filter(p => {
     if (nameFilter && !p.name.toLowerCase().includes(nameFilter.toLowerCase())) return false;
     if (categoryFilter && categoryFilter !== "all" && p.category !== categoryFilter) return false;
-    if (marketplaceFilter && marketplaceFilter !== "all" && p.marketplace !== marketplaceFilter) return false;
+    if (marketplaceFilter && marketplaceFilter !== "all" && p.marketplace.toLowerCase() !== marketplaceFilter.toLowerCase()) return false;
     return true;
   });
 
@@ -243,12 +247,12 @@ export function ProductsClient({
                   {/* Actions */}
                   <div className="flex items-center justify-end gap-2 pt-3 border-t border-admin-line/50 mt-auto opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200">
                     <Dialog open={editProduct?.id === p.id} onOpenChange={(open) => setEditProduct(open ? p : null)}>
-                      <DialogTrigger>
-                         <Button variant="outline" size="sm" className="h-8 text-xs font-medium text-admin-ink-soft hover:text-admin-ink-deep flex-1 bg-admin-paper border-admin-line hover:bg-admin-paper-warm">
+                      <DialogTrigger render={
+                        <Button variant="outline" size="sm" className="h-8 text-xs font-medium text-admin-ink-soft hover:text-admin-ink-deep flex-1 bg-admin-paper border-admin-line hover:bg-admin-paper-warm">
                           <Pencil className="w-3.5 h-3.5 mr-1.5" />
                           Editar
                         </Button>
-                      </DialogTrigger>
+                      } />
                       <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto admin-dialog">
                         <DialogHeader>
                           <DialogTitle className="font-heading text-admin-ink-deep">Editar Produto</DialogTitle>
@@ -257,12 +261,9 @@ export function ProductsClient({
                         <ProductForm categories={cats} action={editProductAction} defaultValues={p} onSuccess={() => setEditProduct(null)} />
                       </DialogContent>
                     </Dialog>
-                    <form action={deleteProductAction}>
-                      <input type="hidden" name="id" value={p.id} />
-                      <Button type="submit" variant="ghost" size="sm" className="h-8 w-8 p-0 text-admin-error hover:bg-admin-error/10 hover:text-admin-error">
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </form>
+                    <Button onClick={() => setProductToDelete(p)} variant="ghost" size="sm" className="h-8 w-8 p-0 text-admin-error hover:bg-admin-error/10 hover:text-admin-error">
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -270,6 +271,26 @@ export function ProductsClient({
           })
         )}
       </div>
+
+      <AlertDialog open={!!productToDelete} onOpenChange={(open) => !open && setProductToDelete(null)}>
+        <AlertDialogContent className="admin-dialog">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="font-heading text-admin-ink-deep">Confirmar exclusão</AlertDialogTitle>
+            <AlertDialogDescription className="text-admin-ink-soft">
+              Tem certeza que deseja excluir o produto <strong>{productToDelete?.name}</strong>? Esta ação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="admin-btn-secondary">Cancelar</AlertDialogCancel>
+            <form action={deleteProductAction} onSubmit={() => setProductToDelete(null)}>
+              <input type="hidden" name="id" value={productToDelete?.id || ""} />
+              <Button type="submit" className="bg-admin-error text-white hover:bg-admin-error/90 w-full sm:w-auto">
+                Excluir
+              </Button>
+            </form>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

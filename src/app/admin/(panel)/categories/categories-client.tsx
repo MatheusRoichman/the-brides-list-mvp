@@ -11,6 +11,9 @@ import { Input } from "@/components/ui/input";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Pencil, Trash2, Tag } from "lucide-react";
 import { z } from "zod";
@@ -35,6 +38,7 @@ export function CategoriesClient({
 }) {
   const [createOpen, setCreateOpen] = useState(false);
   const [editCategory, setEditCategory] = useState<Category | null>(null);
+  const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null);
 
   return (
     <div className="space-y-6 max-w-3xl">
@@ -83,12 +87,12 @@ export function CategoriesClient({
               </div>
               <div className="flex items-center justify-end gap-2 pt-4 border-t border-admin-line/50">
                 <Dialog open={editCategory?.id === c.id} onOpenChange={(open) => setEditCategory(open ? c : null)}>
-                  <DialogTrigger>
+                  <DialogTrigger render={
                     <Button variant="outline" size="sm" className="h-8 text-xs font-medium text-admin-ink-soft hover:text-admin-ink-deep border-admin-line bg-admin-paper hover:bg-admin-paper-warm">
                       <Pencil className="w-3.5 h-3.5 mr-1.5" />
                       Editar
                     </Button>
-                  </DialogTrigger>
+                  } />
                   <DialogContent className="max-w-md admin-dialog">
                     <DialogHeader>
                       <DialogTitle className="font-heading text-admin-ink-deep">Editar Categoria</DialogTitle>
@@ -97,17 +101,34 @@ export function CategoriesClient({
                     <CategoryForm action={editCategoryAction} defaultValues={c} onSuccess={() => setEditCategory(null)} />
                   </DialogContent>
                 </Dialog>
-                <form action={deleteCategoryAction}>
-                  <input type="hidden" name="id" value={c.id} />
-                  <Button type="submit" variant="ghost" size="sm" className="h-8 w-8 p-0 text-admin-error hover:bg-admin-error/10 hover:text-admin-error">
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </form>
+                <Button onClick={() => setCategoryToDelete(c)} variant="ghost" size="sm" className="h-8 w-8 p-0 text-admin-error hover:bg-admin-error/10 hover:text-admin-error">
+                  <Trash2 className="w-4 h-4" />
+                </Button>
               </div>
             </div>
           ))
         )}
       </div>
+
+      <AlertDialog open={!!categoryToDelete} onOpenChange={(open) => !open && setCategoryToDelete(null)}>
+        <AlertDialogContent className="admin-dialog">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="font-heading text-admin-ink-deep">Confirmar exclusão</AlertDialogTitle>
+            <AlertDialogDescription className="text-admin-ink-soft">
+              Tem certeza que deseja excluir a categoria <strong>{categoryToDelete?.fullName}</strong>? Esta ação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="admin-btn-secondary">Cancelar</AlertDialogCancel>
+            <form action={deleteCategoryAction} onSubmit={() => setCategoryToDelete(null)}>
+              <input type="hidden" name="id" value={categoryToDelete?.id || ""} />
+              <Button type="submit" className="bg-admin-error text-white hover:bg-admin-error/90 w-full sm:w-auto">
+                Excluir
+              </Button>
+            </form>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
@@ -132,7 +153,7 @@ function CategoryForm({ action, defaultValues, onSuccess }: {
     if (defaultValues) fd.set("id", defaultValues.id);
     fd.set("fullName", values.fullName);
     fd.set("shortName", values.shortName);
-    
+
     import("react").then(({ startTransition }) => {
       startTransition(async () => {
         await formAction(fd);
