@@ -49,8 +49,8 @@ const MARKETPLACES = [
 ];
 
 /** Serialized versions with ISO string dates for Server → Client transfer */
-type Product = Omit<BaseProduct, "createdAt" | "updatedAt"> & { createdAt: string; updatedAt: string };
-type Category = Omit<BaseCategory, "createdAt" | "updatedAt"> & { createdAt: string; updatedAt: string };
+type Product = Omit<BaseProduct, "createdAt" | "updatedAt"> & { createdAt: string; updatedAt: string | null };
+type Category = Omit<BaseCategory, "createdAt" | "updatedAt"> & { createdAt: string; updatedAt: string | null };
 
 export function ProductsClient({
   products: initialProducts,

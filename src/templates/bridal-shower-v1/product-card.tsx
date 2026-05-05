@@ -6,9 +6,10 @@ import { Product } from "@/entities";
 interface ProductCardProps {
   product: Product;
   showPrices?: boolean;
+  onReserve: (product: Product) => void;
 }
 
-export function ProductCard({ product, showPrices }: ProductCardProps) {
+export function ProductCard({ product, showPrices, onReserve }: ProductCardProps) {
   const formatPrice = (price: string) => {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
@@ -47,12 +48,6 @@ export function ProductCard({ product, showPrices }: ProductCardProps) {
           {product.name}
         </h3>
         
-        {product.description && (
-          <p className="font-['Cormorant_Garamond'] italic text-[15px] leading-[1.45] text-[#7c8268]">
-            {product.description}
-          </p>
-        )}
-        
         {showPrices && product.minPrice && (
           <div className="mt-auto pt-[14px] border-t border-dashed border-[#5a61472e] flex justify-between items-center">
             <span className="font-['Cormorant_SC'] text-[13px] tracking-[0.14em] text-[#3f4632] font-medium uppercase">
@@ -65,16 +60,25 @@ export function ProductCard({ product, showPrices }: ProductCardProps) {
         )}
       </div>
 
-      {/* Action Link */}
-      <a
-        href={product.marketplaceLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-[18px] flex items-center justify-center gap-[8px] py-[12px] px-[14px] border border-[#5a6147] text-[#3f4632] font-['Cormorant_SC'] text-[12px] uppercase tracking-[0.22em] transition-all duration-[0.25s] ease-in-out hover:bg-[#5a6147] hover:text-[#f4f2e6]"
-      >
-        <span>Presentear via {product.marketplace}</span>
-        <ArrowRight className="w-[14px] h-[14px] transition-transform group-hover:translate-x-[3px]" />
-      </a>
+      {/* Action Buttons */}
+      <div className="mt-[24px] space-y-3">
+        <button
+          onClick={() => onReserve(product)}
+          className="w-full py-[12px] bg-[#3f4632] text-[#f4f2e6] font-['Cormorant_SC'] text-[12px] uppercase tracking-[0.22em] transition-all duration-[0.25s] hover:bg-[#5a6147]"
+        >
+          Quero presentear
+        </button>
+
+        <a
+          href={product.marketplaceLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-[8px] py-[10px] text-[#7c8268] font-['Cormorant_SC'] text-[10px] uppercase tracking-[0.18em] transition-all hover:text-[#3f4632]"
+        >
+          <span>Ver na {product.marketplace}</span>
+          <ArrowRight className="w-[12px] h-[12px]" />
+        </a>
+      </div>
     </article>
   );
 }

@@ -7,6 +7,7 @@ import {
   Tag,
   FileText,
   LogOut,
+  CalendarHeart,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
 const navItems = [
   { href: "/admin/products", label: "Produtos", icon: Package },
   { href: "/admin/categories", label: "Categorias", icon: Tag },
+  { href: "/admin/reserves", label: "Reservas", icon: CalendarHeart },
   { href: "/admin/site-content", label: "Conteúdo", icon: FileText },
 ];
 

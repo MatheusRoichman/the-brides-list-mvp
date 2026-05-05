@@ -4,6 +4,8 @@ import { useMemo, useState, useEffect } from "react";
 import { Product, Category, SiteContent } from "@/entities";
 import { Navbar } from "./navbar";
 import { ProductCard } from "./product-card";
+import { ReservationDialog, SuccessScreen } from "./reservation-dialog";
+import { MyReservations } from "./my-reservations";
 
 interface ProductGridProps {
   products: Product[];
@@ -14,6 +16,8 @@ interface ProductGridProps {
 export function ProductGrid({ products, categories, siteContent }: ProductGridProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSection, setActiveSection] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [successToken, setSuccessToken] = useState<string | null>(null);
 
   const normalizeText = (text: string) =>
     text
@@ -78,29 +82,6 @@ export function ProductGrid({ products, categories, siteContent }: ProductGridPr
             </p>
           ))}
         </div>
-
-        {/* Legend */}
-        {siteContent.showPrices && (
-          <div className="flex justify-center flex-wrap gap-x-8 gap-y-2 mt-12">
-            {[
-              { label: 'Lembrança', dots: 1 },
-              { label: 'Presente médio', dots: 2 },
-              { label: 'Presente especial', dots: 3 },
-            ].map((item) => (
-              <div key={item.label} className="flex items-center gap-2 font-['Cormorant_SC'] text-[10px] tracking-[0.18em] text-[#7c8268] uppercase">
-                <span className="flex gap-0.5">
-                  {[1, 2, 3].map((dot) => (
-                    <span
-                      key={dot}
-                      className={`w-[6px] h-[6px] rounded-full border border-[#5a61474d] ${dot <= item.dots ? 'bg-[#5a614780]' : ''}`}
-                    />
-                  ))}
-                </span>
-                {item.label}
-              </div>
-            ))}
-          </div>
-        )}
       </section>
 
       <Navbar
@@ -109,6 +90,8 @@ export function ProductGrid({ products, categories, siteContent }: ProductGridPr
         setSearchQuery={setSearchQuery}
         activeSection={activeSection}
       />
+
+      <MyReservations />
 
       <main className="max-w-7xl mx-auto px-4 py-16 space-y-24 min-h-screen">
         {categories.map((category) => {
@@ -126,7 +109,12 @@ export function ProductGrid({ products, categories, siteContent }: ProductGridPr
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {categoryProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} showPrices={siteContent.showPrices} />
+                  <ProductCard 
+                    key={product.id} 
+                    product={product} 
+                    showPrices={siteContent.showPrices} 
+                    onReserve={setSelectedProduct}
+                  />
                 ))}
               </div>
             </section>
@@ -147,6 +135,25 @@ export function ProductGrid({ products, categories, siteContent }: ProductGridPr
           </div>
         )}
       </main>
+
+      {selectedProduct && !successToken && (
+        <ReservationDialog
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+          onSuccess={setSuccessToken}
+        />
+      )}
+
+      {selectedProduct && successToken && (
+        <SuccessScreen
+          product={selectedProduct}
+          token={successToken}
+          onClose={() => {
+            setSelectedProduct(null);
+            setSuccessToken(null);
+          }}
+        />
+      )}
     </>
   );
 }

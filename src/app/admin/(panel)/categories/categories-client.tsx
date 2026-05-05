@@ -26,7 +26,7 @@ const categorySchema = z.object({
 });
 
 /** Serialized version with ISO string dates for Server → Client transfer */
-type Category = Omit<BaseCategory, "createdAt" | "updatedAt"> & { createdAt: string; updatedAt: string };
+type Category = Omit<BaseCategory, "createdAt" | "updatedAt"> & { createdAt: string; updatedAt: string | null };
 
 export function CategoriesClient({
   categories: initialCategories,

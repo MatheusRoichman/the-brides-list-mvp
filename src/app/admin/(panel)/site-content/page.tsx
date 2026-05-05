@@ -12,8 +12,8 @@ export default async function SiteContentPage() {
       siteContent = {
         ...result.siteContent,
         eventTimestamp: result.siteContent.eventTimestamp.toISOString(),
-        createdAt: result.siteContent.createdAt.toISOString(),
-        updatedAt: result.siteContent.updatedAt.toISOString(),
+        createdAt: result.siteContent.createdAt?.toISOString() ?? new Date().toISOString(),
+        updatedAt: result.siteContent.updatedAt?.toISOString() ?? null,
       };
     }
   } catch {

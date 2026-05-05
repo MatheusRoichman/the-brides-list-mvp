@@ -2,6 +2,7 @@ import { numeric, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { uuidv7 } from "../columns/uuidv7";
 import { relations } from "drizzle-orm";
 import { categories } from "./categories";
+import { reservations } from "./reservations";
 
 export const products = pgTable("products", {
   id: uuidv7().primaryKey(),
@@ -23,5 +24,9 @@ export const productsRelations = relations(products, ({ one }) => ({
   category: one(categories, {
     fields: [products.category],
     references: [categories.id],
+  }),
+  reservation: one(reservations, {
+    fields: [products.id],
+    references: [reservations.productId],
   }),
 }));

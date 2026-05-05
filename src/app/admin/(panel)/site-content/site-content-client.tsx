@@ -37,7 +37,7 @@ type SiteContentRow = InferSelectModel<typeof siteContent>;
 type SerializedSiteContent = Omit<SiteContentRow, "eventTimestamp" | "createdAt" | "updatedAt"> & {
   eventTimestamp: string;
   createdAt: string;
-  updatedAt: string;
+  updatedAt: string | null;
 };
 
 export function SiteContentClient({

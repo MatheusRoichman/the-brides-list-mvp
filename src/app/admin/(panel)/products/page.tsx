@@ -11,14 +11,14 @@ export default async function ProductsPage() {
   // Serialize Date objects for client component transfer
   const serializedProducts = products.map((p) => ({
     ...p,
-    createdAt: p.createdAt.toISOString(),
-    updatedAt: p.updatedAt.toISOString(),
+    createdAt: p.createdAt?.toISOString() ?? new Date().toISOString(),
+    updatedAt: p.updatedAt?.toISOString() ?? null,
   }));
 
   const serializedCategories = categories.map((c) => ({
     ...c,
-    createdAt: c.createdAt.toISOString(),
-    updatedAt: c.updatedAt.toISOString(),
+    createdAt: c.createdAt?.toISOString() ?? new Date().toISOString(),
+    updatedAt: c.updatedAt?.toISOString() ?? null,
   }));
 
   return <ProductsClient products={serializedProducts} categories={serializedCategories} />;
