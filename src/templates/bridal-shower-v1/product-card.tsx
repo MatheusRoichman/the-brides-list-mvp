@@ -35,10 +35,12 @@ export function ProductCard({ product, showPrices, onReserve }: ProductCardProps
 
       {/* Image Container */}
       <div className="relative w-[100px] h-[100px] mx-auto mb-[28px] flex items-center justify-center">
-        <img
+        <Image
           src={product.imageUrl}
           alt={product.name}
-          className="w-full h-full object-contain"
+          fill
+          className="object-contain"
+          sizes="100px"
         />
       </div>
 

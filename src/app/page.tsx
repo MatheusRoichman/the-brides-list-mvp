@@ -7,12 +7,12 @@ export const revalidate = false; // Page is static, revalidated via revalidatePa
 
 export async function generateMetadata() {
   const { siteContent } = await readSiteContent();
-  
+
   if (!siteContent) return {};
 
   return {
     title: `${siteContent.coupleName} | Chá de Panela`,
-    description: siteContent.heroDescription,
+    description: siteContent.heroDescription || "Uma listinha carinhosa de sugestões para quem quer dar aquele empurrãozinho na construção do nosso lar.",
   };
 }
 

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Loader2, ImageIcon, X } from "lucide-react";
@@ -38,7 +39,7 @@ export function ImageUpload({ folder, value, onChange, id }: ImageUploadProps) {
     <div className="space-y-2">
       {value ? (
         <div className="relative group rounded-xl overflow-hidden w-full aspect-video border border-admin-line bg-admin-paper">
-          <img src={value} alt="Preview" className="w-full h-full object-contain" />
+          <Image src={value} alt="Preview" fill className="object-contain" sizes="100vw" />
           <button
             type="button"
             onClick={() => onChange("")}

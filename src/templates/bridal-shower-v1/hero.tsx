@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { SiteContent } from "@/entities";
 
 interface HeroProps {
@@ -9,10 +10,13 @@ export function Hero({ content }: HeroProps) {
     <header className="relative z-10 pt-[90px] pb-[40px] px-6 text-center max-w-[920px] mx-auto overflow-hidden">
       {/* Decorative Pot Icon */}
       <div className="flex justify-center mb-[28px] animate-in fade-in slide-in-from-top-4 duration-1000">
-        <img 
+        <Image 
           src="/assets/bridal-shower-v1/pot.png" 
           alt="Panela com coração" 
+          width={110}
+          height={110}
           className="w-[110px] h-auto block"
+          priority
         />
       </div>
 
@@ -24,10 +28,13 @@ export function Hero({ content }: HeroProps) {
       {/* Main Logo / Names */}
       {content.eventLogoUrl ? (
         <div className="flex justify-center mb-6 animate-in fade-in zoom-in duration-1000 delay-300">
-          <img 
+          <Image 
             src={content.eventLogoUrl} 
             alt={content.coupleName} 
+            width={560}
+            height={200}
             className="block w-[min(560px,92%)] h-auto"
+            priority
           />
         </div>
       ) : (

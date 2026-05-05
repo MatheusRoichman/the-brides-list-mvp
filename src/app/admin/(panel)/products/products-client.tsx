@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useActionState, useState } from "react";
 import { Product as BaseProduct, Category as BaseCategory } from "@/entities";
 
@@ -199,7 +200,7 @@ export function ProductsClient({
                 {/* Image Section */}
                 <div className="aspect-[4/3] bg-admin-paper relative border-b border-admin-line overflow-hidden group-hover:opacity-95 transition-opacity">
                   {p.imageUrl ? (
-                    <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    <Image src={p.imageUrl} alt={p.name} fill className="object-cover transition-transform duration-500 group-hover:scale-105" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-admin-paper-warm">
                       <Package className="w-12 h-12 text-admin-line" />

@@ -36,8 +36,8 @@ const pinyonScript = Pinyon_Script({
 
 
 export const metadata: Metadata = {
-  title: "The Bride's List - Glauci & Ezequiel",
-  description: "A lista de presentes dos noivos, Glauci & Ezequiel. Confira os produtos que eles escolheram e ajude-os a montar a casa nova.",
+  title: "The Bride's List | Chá de Panela",
+  description: "Uma listinha carinhosa de sugestões para quem quer dar aquele empurrãozinho na construção do nosso lar.",
 };
 
 export default function RootLayout({
