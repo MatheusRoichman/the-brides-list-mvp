@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { logoutAction } from "../actions/auth";
 import { env } from "@/env";
+import { requireAuth } from "@/lib/admin-auth";
 import {
   Package,
   Tag,
@@ -28,6 +29,8 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  await requireAuth();
+  
   return (
     <div className="flex min-h-screen bg-admin-paper text-admin-ink">
       <aside className="admin-card hidden md:flex w-60 flex-col rounded-none border-r border-l-0 border-y-0">

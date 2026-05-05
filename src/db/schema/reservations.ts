@@ -7,7 +7,7 @@ export const reservations = pgTable(
   "reservations",
   {
     id: uuidv7().primaryKey(),
-    productId: text("product_id")
+    productId: uuidv7("product_id")
       .notNull()
       .unique()
       .references(() => products.id, { onDelete: "cascade" }),

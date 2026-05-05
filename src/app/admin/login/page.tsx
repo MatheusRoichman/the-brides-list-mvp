@@ -40,16 +40,16 @@ export default function LoginPage() {
           <div className="admin-icon-circle mx-auto w-16 h-16 mb-5">
             <Lock className="w-7 h-7 text-admin-ink" />
           </div>
-          <h1 className="text-3xl font-normal mb-2 font-heading text-admin-ink-deep tracking-[0.04em]">
-            Painel Administrativo
+          <h1 className="text-3xl mt-2 font-normal mb-2 font-heading text-admin-ink-deep tracking-[0.04em]">
+            The Bride's List
           </h1>
           <p className="text-sm uppercase tracking-[0.28em] font-label text-admin-ink-soft">
-            Lista de Presentes
+            Painel Administrativo
           </p>
         </div>
 
         <div className="admin-card p-6 shadow-sm">
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          <form action={formAction} onSubmit={form.handleSubmit(onSubmit)} method="POST" className="space-y-5">
             <Controller
               control={form.control}
               name="password"
