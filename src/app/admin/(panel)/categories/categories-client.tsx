@@ -1,8 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import type { InferSelectModel } from "drizzle-orm";
-import type { categories } from "@/db/schema";
+import { Category as BaseCategory } from "@/entities";
 
 import { createCategoryAction, editCategoryAction, deleteCategoryAction } from "@/app/admin/actions/categories";
 
@@ -26,10 +25,8 @@ const categorySchema = z.object({
   shortName: z.string().min(1, "O nome curto é obrigatório"),
 });
 
-type _Category = InferSelectModel<typeof categories>;
-
 /** Serialized version with ISO string dates for Server → Client transfer */
-type Category = Omit<_Category, "createdAt" | "updatedAt"> & { createdAt: string; updatedAt: string };
+type Category = Omit<BaseCategory, "createdAt" | "updatedAt"> & { createdAt: string; updatedAt: string };
 
 export function CategoriesClient({
   categories: initialCategories,

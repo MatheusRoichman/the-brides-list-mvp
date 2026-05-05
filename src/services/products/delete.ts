@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
 
 import { db } from "@/db";
@@ -24,6 +25,8 @@ export async function deleteProduct(
   if (!deleted) {
     throw new Error(`Product ${input.id} not found`);
   }
+
+  revalidatePath("/");
 
   return { id: deleted.id };
 }

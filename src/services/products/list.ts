@@ -1,7 +1,7 @@
 "use server";
 
 import { desc } from "drizzle-orm";
-import type { InferSelectModel } from "drizzle-orm";
+import { Product } from "@/entities";
 
 import { db } from "@/db";
 import { products } from "@/db/schema";
@@ -11,7 +11,7 @@ export interface ListProductsInput {
 }
 
 export interface ListProductsOutput {
-  products: InferSelectModel<typeof products>[];
+  products: Product[];
 }
 
 export async function listProducts(

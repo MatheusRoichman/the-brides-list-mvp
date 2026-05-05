@@ -1,12 +1,12 @@
 "use server";
 
-import type { InferSelectModel } from "drizzle-orm";
+import { SiteContent } from "@/entities";
 
 import { db } from "@/db";
 import { siteContent } from "@/db/schema";
 
 export interface ReadSiteContentOutput {
-  siteContent: InferSelectModel<typeof siteContent> | null;
+  siteContent: SiteContent | null;
 }
 
 export async function readSiteContent(): Promise<ReadSiteContentOutput> {

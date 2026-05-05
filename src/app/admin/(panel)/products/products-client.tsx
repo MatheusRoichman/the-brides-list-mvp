@@ -1,8 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import type { InferSelectModel } from "drizzle-orm";
-import type { products, categories } from "@/db/schema";
+import { Product as BaseProduct, Category as BaseCategory } from "@/entities";
 
 import { createProductAction, editProductAction, deleteProductAction } from "@/app/admin/actions/products";
 import { ImageUpload } from "@/components/image-upload";
@@ -49,12 +48,9 @@ const MARKETPLACES = [
   { value: "outros", label: "Outros" }
 ];
 
-type _Product = InferSelectModel<typeof products>;
-type _Category = InferSelectModel<typeof categories>;
-
 /** Serialized versions with ISO string dates for Server → Client transfer */
-type Product = Omit<_Product, "createdAt" | "updatedAt"> & { createdAt: string; updatedAt: string };
-type Category = Omit<_Category, "createdAt" | "updatedAt"> & { createdAt: string; updatedAt: string };
+type Product = Omit<BaseProduct, "createdAt" | "updatedAt"> & { createdAt: string; updatedAt: string };
+type Category = Omit<BaseCategory, "createdAt" | "updatedAt"> & { createdAt: string; updatedAt: string };
 
 export function ProductsClient({
   products: initialProducts,

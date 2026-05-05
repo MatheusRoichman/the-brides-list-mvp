@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Cormorant_Garamond, Cormorant_SC } from "next/font/google";
+import { Geist, Geist_Mono, Cormorant_Garamond, Cormorant_SC, Pinyon_Script } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,6 +25,13 @@ const cormorantSC = Cormorant_SC({
   weight: ["300", "400", "500"],
 });
 
+const pinyonScript = Pinyon_Script({
+  variable: "--font-pinyon",
+  subsets: ["latin"],
+  weight: ["400"],
+});
+
+
 export const metadata: Metadata = {
   title: "The Bride's List - Glauci & Ezequiel",
   description: "A lista de presentes dos noivos, Glauci & Ezequiel. Confira os produtos que eles escolheram e ajude-os a montar a casa nova.",
@@ -38,8 +45,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${cormorantGaramond.variable} ${cormorantSC.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${cormorantGaramond.variable} ${cormorantSC.variable} ${pinyonScript.variable} h-full antialiased`}
     >
+
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

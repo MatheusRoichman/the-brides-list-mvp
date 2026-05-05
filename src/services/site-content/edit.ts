@@ -1,7 +1,8 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
-import type { InferSelectModel } from "drizzle-orm";
+import { SiteContent } from "@/entities";
 
 import { db } from "@/db";
 import { siteContent } from "@/db/schema";
@@ -21,7 +22,7 @@ export interface EditSiteContentInput {
 }
 
 export interface EditSiteContentOutput {
-  siteContent: InferSelectModel<typeof siteContent>;
+  siteContent: SiteContent;
 }
 
 export async function editSiteContent(
@@ -40,6 +41,8 @@ export async function editSiteContent(
     .set(input)
     .where(eq(siteContent.id, existing.id))
     .returning();
+
+  revalidatePath("/");
 
   return { siteContent: updated };
 }

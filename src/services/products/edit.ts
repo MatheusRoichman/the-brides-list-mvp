@@ -1,7 +1,8 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
-import type { InferSelectModel } from "drizzle-orm";
+import { Product } from "@/entities";
 
 import { db } from "@/db";
 import { products } from "@/db/schema";
@@ -18,7 +19,7 @@ export interface EditProductInput {
 }
 
 export interface EditProductOutput {
-  product: InferSelectModel<typeof products>;
+  product: Product;
 }
 
 export async function editProduct(
@@ -38,6 +39,8 @@ export async function editProduct(
   if (!product) {
     throw new Error(`Product ${id} not found`);
   }
+
+  revalidatePath("/");
 
   return { product };
 }

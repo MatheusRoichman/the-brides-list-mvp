@@ -1,6 +1,7 @@
 "use server";
 
-import type { InferSelectModel } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { Category } from "@/entities";
 
 import { db } from "@/db";
 import { categories } from "@/db/schema";
@@ -11,7 +12,7 @@ export interface CreateCategoryInput {
 }
 
 export interface CreateCategoryOutput {
-  category: InferSelectModel<typeof categories>;
+  category: Category;
 }
 
 export async function createCategory(
@@ -25,6 +26,8 @@ export async function createCategory(
       shortName: input.shortName,
     })
     .returning();
+
+  revalidatePath("/");
 
   return { category };
 }

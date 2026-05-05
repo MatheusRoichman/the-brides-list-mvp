@@ -1,23 +1,22 @@
-import { SQL } from "bun";
-import { drizzle } from "drizzle-orm/bun-sql";
+import postgres from "postgres";
+import { drizzle } from "drizzle-orm/postgres-js";
 
 import { env } from "@/env";
-
 import * as schema from "./schema";
 
 const globalForDb = globalThis as unknown as {
-  client: SQL | undefined;
+  conn: postgres.Sql | undefined;
 };
 
-export const client =
-  globalForDb.client ??
-  new SQL(env.DATABASE_URL, {
-    ssl: true,
+const conn =
+  globalForDb.conn ??
+  postgres(env.DATABASE_URL, {
     prepare: false,
+    ssl: "require",
   });
 
 if (process.env.NODE_ENV !== "production") {
-  globalForDb.client = client;
+  globalForDb.conn = conn;
 }
 
-export const db = drizzle(client, { schema, casing: "snake_case" });
+export const db = drizzle(conn, { schema, casing: "snake_case" });

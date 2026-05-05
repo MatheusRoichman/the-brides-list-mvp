@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
 
 import { db } from "@/db";
@@ -24,6 +25,8 @@ export async function deleteCategory(
   if (!deleted) {
     throw new Error(`Category ${input.id} not found`);
   }
+
+  revalidatePath("/");
 
   return { id: deleted.id };
 }

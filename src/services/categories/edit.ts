@@ -1,7 +1,8 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
-import type { InferSelectModel } from "drizzle-orm";
+import { Category } from "@/entities";
 
 import { db } from "@/db";
 import { categories } from "@/db/schema";
@@ -13,7 +14,7 @@ export interface EditCategoryInput {
 }
 
 export interface EditCategoryOutput {
-  category: InferSelectModel<typeof categories>;
+  category: Category;
 }
 
 export async function editCategory(
@@ -30,6 +31,8 @@ export async function editCategory(
   if (!category) {
     throw new Error(`Category ${id} not found`);
   }
+
+  revalidatePath("/");
 
   return { category };
 }

@@ -1,6 +1,7 @@
 "use server";
 
-import type { InferSelectModel } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { SiteContent } from "@/entities";
 
 import { db } from "@/db";
 import { siteContent } from "@/db/schema";
@@ -20,7 +21,7 @@ export interface CreateSiteContentInput {
 }
 
 export interface CreateSiteContentOutput {
-  siteContent: InferSelectModel<typeof siteContent>;
+  siteContent: SiteContent;
 }
 
 export async function createSiteContent(

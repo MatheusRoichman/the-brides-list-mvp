@@ -1,6 +1,7 @@
 "use server";
 
-import type { InferSelectModel } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { Product } from "@/entities";
 
 import { db } from "@/db";
 import { products } from "@/db/schema";
@@ -16,7 +17,7 @@ export interface CreateProductInput {
 }
 
 export interface CreateProductOutput {
-  product: InferSelectModel<typeof products>;
+  product: Product;
 }
 
 export async function createProduct(
@@ -34,6 +35,8 @@ export async function createProduct(
       maxPrice: input.maxPrice ?? null,
     })
     .returning();
+
+  revalidatePath("/");
 
   return { product };
 }
