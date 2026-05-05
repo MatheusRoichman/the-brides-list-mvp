@@ -10,6 +10,7 @@ export interface EditProductInput {
   id: string;
   name?: string;
   marketplace?: string;
+  marketplaceLink?: string;
   categoryId?: string;
   imageUrl?: string;
   minPrice?: string | null;

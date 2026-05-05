@@ -11,9 +11,7 @@ import { Input } from "@/components/ui/input";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription,
 } from "@/components/ui/dialog";
-import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import { Plus, Pencil, Trash2, Tag } from "lucide-react";
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
@@ -40,7 +38,7 @@ export function CategoriesClient({
 
   return (
     <div className="space-y-6 max-w-3xl">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="admin-heading flex items-center gap-2">
             <Tag className="w-5 h-5 text-admin-ink-soft" />
@@ -64,56 +62,51 @@ export function CategoriesClient({
         </Dialog>
       </div>
 
-      <div className="admin-card overflow-hidden">
-        <Table>
-          <TableHeader>
-            <TableRow className="border-admin-line">
-              <TableHead className="admin-table-head">Nome Completo</TableHead>
-              <TableHead className="admin-table-head">Nome Curto</TableHead>
-              <TableHead className="admin-table-head">Criado em</TableHead>
-              <TableHead className="admin-table-head text-right">Ações</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {initialCategories.length === 0 ? (
-              <TableRow className="border-admin-line">
-                <TableCell colSpan={4} className="text-center py-12 italic font-heading text-admin-ink-soft">
-                  Nenhuma categoria cadastrada
-                </TableCell>
-              </TableRow>
-            ) : (
-              initialCategories.map((c) => (
-                <TableRow key={c.id} className="border-admin-line">
-                  <TableCell className="font-medium font-heading text-admin-ink-deep">{c.fullName}</TableCell>
-                  <TableCell className="text-admin-ink">{c.shortName}</TableCell>
-                  <TableCell className="text-sm text-admin-ink-soft">
-                    {new Date(c.createdAt).toLocaleDateString("pt-BR")}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-1">
-                      <Dialog open={editCategory?.id === c.id} onOpenChange={(open) => setEditCategory(open ? c : null)}>
-                        <DialogTrigger render={
-                          <Button variant="ghost" size="icon" className="cursor-pointer text-admin-ink-soft"><Pencil className="w-4 h-4" /></Button>
-                        } />
-                        <DialogContent className="max-w-md admin-dialog">
-                          <DialogHeader>
-                            <DialogTitle className="font-heading text-admin-ink-deep">Editar Categoria</DialogTitle>
-                            <DialogDescription className="text-admin-ink-soft">Altere os dados da categoria</DialogDescription>
-                          </DialogHeader>
-                          <CategoryForm action={editCategoryAction} defaultValues={c} onSuccess={() => setEditCategory(null)} />
-                        </DialogContent>
-                      </Dialog>
-                      <form action={deleteCategoryAction}>
-                        <input type="hidden" name="id" value={c.id} />
-                        <Button type="submit" variant="ghost" size="icon" className="cursor-pointer text-admin-error"><Trash2 className="w-4 h-4" /></Button>
-                      </form>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {initialCategories.length === 0 ? (
+          <div className="col-span-full admin-card text-center py-12 italic font-heading text-admin-ink-soft">
+            Nenhuma categoria cadastrada
+          </div>
+        ) : (
+          initialCategories.map((c) => (
+            <div key={c.id} className="admin-card p-5 flex flex-col gap-4 hover:border-admin-olive/30 transition-colors">
+              <div className="flex-1">
+                <h3 className="font-heading text-xl font-semibold text-admin-ink-deep mb-2">{c.fullName}</h3>
+                <div className="flex items-center gap-2 text-sm">
+                  <Badge variant="outline" className="text-admin-ink bg-admin-paper border-admin-line font-medium text-xs px-2 py-0.5">
+                    {c.shortName}
+                  </Badge>
+                  <span className="text-admin-ink-soft text-xs font-medium">
+                    • {new Date(c.createdAt).toLocaleDateString("pt-BR")}
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center justify-end gap-2 pt-4 border-t border-admin-line/50">
+                <Dialog open={editCategory?.id === c.id} onOpenChange={(open) => setEditCategory(open ? c : null)}>
+                  <DialogTrigger>
+                    <Button variant="outline" size="sm" className="h-8 text-xs font-medium text-admin-ink-soft hover:text-admin-ink-deep border-admin-line bg-admin-paper hover:bg-admin-paper-warm">
+                      <Pencil className="w-3.5 h-3.5 mr-1.5" />
+                      Editar
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-md admin-dialog">
+                    <DialogHeader>
+                      <DialogTitle className="font-heading text-admin-ink-deep">Editar Categoria</DialogTitle>
+                      <DialogDescription className="text-admin-ink-soft">Altere os dados da categoria</DialogDescription>
+                    </DialogHeader>
+                    <CategoryForm action={editCategoryAction} defaultValues={c} onSuccess={() => setEditCategory(null)} />
+                  </DialogContent>
+                </Dialog>
+                <form action={deleteCategoryAction}>
+                  <input type="hidden" name="id" value={c.id} />
+                  <Button type="submit" variant="ghost" size="sm" className="h-8 w-8 p-0 text-admin-error hover:bg-admin-error/10 hover:text-admin-error">
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </form>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

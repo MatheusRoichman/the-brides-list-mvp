@@ -75,7 +75,7 @@ export default async function AdminLayout({
         </div>
       </aside>
 
-      <div className="flex flex-1 flex-col">
+      <div className="flex flex-1 flex-col min-w-0 w-full overflow-hidden">
         <header className="md:hidden flex items-center justify-between px-4 py-3 bg-admin-paper/92 backdrop-blur-sm border-b border-admin-line">
           <Link href="/admin/products" className="flex items-center gap-2">
             <div className="admin-icon-circle w-8 h-8">
@@ -110,7 +110,7 @@ export default async function AdminLayout({
           </nav>
         </header>
 
-        <main className="flex-1 p-4 md:p-8 overflow-auto">
+        <main className="flex-1 p-4 md:p-8 overflow-y-auto overflow-x-hidden min-w-0">
           {children}
         </main>
       </div>

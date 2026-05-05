@@ -8,6 +8,7 @@ import { products } from "@/db/schema";
 export interface CreateProductInput {
   name: string;
   marketplace: string;
+  marketplaceLink: string;
   categoryId: string;
   imageUrl: string;
   minPrice?: string | null;
@@ -26,6 +27,7 @@ export async function createProduct(
     .values({
       name: input.name,
       marketplace: input.marketplace,
+      marketplaceLink: input.marketplaceLink,
       category: input.categoryId,
       imageUrl: input.imageUrl,
       minPrice: input.minPrice ?? null,

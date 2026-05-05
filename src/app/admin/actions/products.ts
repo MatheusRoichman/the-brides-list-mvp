@@ -17,6 +17,7 @@ export async function createProductAction(
     await createProduct({
       name: formData.get("name") as string,
       marketplace: formData.get("marketplace") as string,
+      marketplaceLink: formData.get("marketplaceLink") as string,
       categoryId: formData.get("categoryId") as string,
       imageUrl: formData.get("imageUrl") as string,
       minPrice: (formData.get("minPrice") as string) || null,
@@ -42,6 +43,7 @@ export async function editProductAction(
       id: formData.get("id") as string,
       name: (formData.get("name") as string) || undefined,
       marketplace: (formData.get("marketplace") as string) || undefined,
+      marketplaceLink: (formData.get("marketplaceLink") as string) || undefined,
       categoryId: (formData.get("categoryId") as string) || undefined,
       imageUrl: (formData.get("imageUrl") as string) || undefined,
       minPrice: formData.has("minPrice") ? (formData.get("minPrice") as string) || null : undefined,

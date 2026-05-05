@@ -7,6 +7,7 @@ export const products = pgTable("products", {
   id: uuidv7().primaryKey(),
   name: text("name").notNull(),
   marketplace: text("marketplace").notNull(),
+  marketplaceLink: text("marketplace_link").notNull().default(""),
   category: text("category").notNull(),
   imageUrl: text("image_url").notNull(),
   minPrice: numeric("min_price", { precision: 10, scale: 2 }),
