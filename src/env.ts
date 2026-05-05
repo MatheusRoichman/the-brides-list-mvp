@@ -6,6 +6,7 @@ const envSchema = z.object({
   ADMIN_PASSWORD: z.string(),
   SUPABASE_URL: z.url(),
   SUPABASE_SERVICE_KEY: z.string(),
+  ADMIN_JWT_SECRET: z.string().min(32),
 });
 
 export const env = envSchema.parse(process.env);

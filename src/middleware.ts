@@ -1,10 +1,24 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { jwtVerify } from "jose";
+import { env } from "./env";
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const isLoginPage = request.nextUrl.pathname === "/admin/login";
   const session = request.cookies.get("admin_session");
-  const isAuthenticated = session?.value === "authenticated";
+  
+  let isAuthenticated = false;
+
+  if (session?.value) {
+    try {
+      const secretKey = new TextEncoder().encode(env.ADMIN_JWT_SECRET);
+      const { payload } = await jwtVerify(session.value, secretKey);
+      isAuthenticated = payload.role === "admin";
+    } catch (error) {
+      console.error("JWT Verification failed:", error);
+      isAuthenticated = false;
+    }
+  }
 
   if (!isAuthenticated && !isLoginPage) {
     return NextResponse.redirect(new URL("/admin/login", request.url));

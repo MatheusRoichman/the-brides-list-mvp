@@ -2,11 +2,12 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { SignJWT, jwtVerify } from "jose";
 
 import { env } from "@/env";
 
 const COOKIE_NAME = "admin_session";
-const COOKIE_VALUE = "authenticated";
+const secretKey = new TextEncoder().encode(env.ADMIN_JWT_SECRET);
 
 export async function login(password: string): Promise<boolean> {
   if (password !== env.ADMIN_PASSWORD) {
@@ -15,7 +16,13 @@ export async function login(password: string): Promise<boolean> {
 
   const jar = await cookies();
 
-  jar.set(COOKIE_NAME, COOKIE_VALUE, {
+  const token = await new SignJWT({ role: "admin" })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("7d")
+    .sign(secretKey);
+
+  jar.set(COOKIE_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
@@ -32,10 +39,9 @@ export async function logout(): Promise<void> {
 }
 
 export async function requireAuth(): Promise<void> {
-  const jar = await cookies();
-  const session = jar.get(COOKIE_NAME);
+  const isAuth = await isAuthenticated();
 
-  if (session?.value !== COOKIE_VALUE) {
+  if (!isAuth) {
     redirect("/admin/login");
   }
 }
@@ -44,5 +50,14 @@ export async function isAuthenticated(): Promise<boolean> {
   const jar = await cookies();
   const session = jar.get(COOKIE_NAME);
 
-  return session?.value === COOKIE_VALUE;
+  if (!session?.value) {
+    return false;
+  }
+
+  try {
+    const { payload } = await jwtVerify(session.value, secretKey);
+    return payload.role === "admin";
+  } catch (error) {
+    return false;
+  }
 }
