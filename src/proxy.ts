@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 import { env } from "./env";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const isLoginPage = request.nextUrl.pathname === "/admin/login";
   const session = request.cookies.get("admin_session");
   
