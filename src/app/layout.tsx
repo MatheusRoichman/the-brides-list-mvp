@@ -3,6 +3,8 @@ import { Geist, Geist_Mono, Cormorant_Garamond, Cormorant_SC, Pinyon_Script } fr
 import "./globals.css";
 import { Toaster } from "sonner";
 
+import { Analytics } from "@vercel/analytics/next"
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -51,6 +53,8 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         {children}
         <Toaster position="top-center" />
+
+        <Analytics />
       </body>
     </html>
   );
